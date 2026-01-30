@@ -1,23 +1,52 @@
 import React from 'react'
-import logo from './assets/logo.png'
+const logo = "/public/logo.png";
 
 const App = () => {
 
+  const [orderId, setOrderId] = React.useState(10020);
+
+  React.useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  }, []);
+
+  const showNotification = () => {
+    const randomPrice = (Math.random() * 500 + 10).toFixed(2);
+    const now = new Date();
+    const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    const options = {
+      body: `Order #${orderId}\n$${randomPrice}, 1 item from Online Store \nOTHERSIDE`,
+      icon: logo,
+      badge: logo,
+      vibrate: [200, 100, 200],
+      tag: "shopify-notification",
+      renotify: true,
+      timestamp: now.getTime() // Add timestamp for native sorting/display if supported
+    };
+
+    const title = `Shopify • www.shopifynotify.com • ${timeString}`;
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then(registration => {
+        registration.showNotification(title, options);
+      });
+    } else {
+      new Notification(title, options);
+    }
+    setOrderId(prev => prev + 1);
+  }
+
   const notifyMe = () => {
     if (!("Notification" in window)) {
-      alert("This browser does not support desktop notification");
+      alert("This browser does not support notifications");
     } else if (Notification.permission === "granted") {
-      new Notification("Fakely Pro • www.fakely-pro.com • 1m", {
-        body: "Order #10020\n$500.00, 1 item from Online Store \nOTHERSIDE",
-        icon: logo,
-      });
+      showNotification();
     } else if (Notification.permission !== "denied") {
       Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
-          new Notification("Fakely Pro • www.fakely-pro.com • 1m", {
-            body: "Order #10020\n$500.00, 1 item from Online Store \nOTHERSIDE",
-            icon: logo,
-          });
+          showNotification();
         }
       });
     }
