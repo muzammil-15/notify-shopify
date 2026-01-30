@@ -13,24 +13,27 @@ const App = () => {
 
   const showNotification = () => {
     const randomPrice = (Math.random() * 500 + 10).toFixed(2);
+    const itemCount = Math.floor(Math.random() * 5) + 1;
     const now = new Date();
     const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
     const options = {
-      body: `Order #${orderId}\n$${randomPrice}, 1 item from Online Store \nOTHERSIDE`,
+      body: `Order #${orderId}\n$${randomPrice}, ${itemCount} ${itemCount === 1 ? 'item' : 'items'} from Online Store \nOTHERSIDE`,
       icon: logo,
       badge: logo,
       vibrate: [200, 100, 200],
-      tag: "shopify-notification",
-      renotify: true,
       timestamp: now.getTime() // Add timestamp for native sorting/display if supported
     };
 
     const title = `Shopify • www.shopifynotify.com • ${timeString}`;
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.ready.then(registration => {
-        registration.showNotification(title, options);
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({
+        type: 'SHOW_NOTIFICATION',
+        payload: {
+          title,
+          options
+        }
       });
     } else {
       new Notification(title, options);
