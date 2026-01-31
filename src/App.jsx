@@ -1,5 +1,6 @@
 import React from 'react'
-const logo = "/public/logo.png";
+const logoPath = "/logo.png";
+const logo = typeof window !== 'undefined' ? `${window.location.origin}${logoPath}` : logoPath;
 
 const App = () => {
 
@@ -67,7 +68,8 @@ const App = () => {
     const options = {
       body: `Order #${orderId} from Shopify \n$${randomPrice}, ${itemCount} ${itemCount === 1 ? 'item' : 'items'} from Online Store \n${storeName}`,
       icon: styledIcon,
-      badge: styledIcon, // Also using it for the badge
+      image: styledIcon, // Explicitly set the big picture/image to override placeholders
+      badge: logo, // Use simple URL for the small badge icon to ensure compatibility
       vibrate: [200, 100, 200],
       timestamp: now.getTime() // Add timestamp for native sorting/display if supported
     };
