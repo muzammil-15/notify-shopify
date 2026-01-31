@@ -110,7 +110,7 @@ const App = () => {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', flexDirection: 'column' }}>
-      <audio src="/notification.mp3" controls></audio>
+      {/* <audio src="/notification.mp3" controls></audio> */}
       <h1>Shopify Alert System</h1>
       <button
         onClick={notifyMe}
