@@ -68,13 +68,17 @@ const App = () => {
     const options = {
       body: `Order #${orderId} from Shopify \n$${randomPrice}, ${itemCount} ${itemCount === 1 ? 'item' : 'items'} from Online Store \n${storeName}`,
       icon: styledIcon,
-      image: styledIcon, // Explicitly set the big picture/image to override placeholders
+      // image: styledIcon, // Removed to prevent huge image in notification body
       badge: logo, // Use simple URL for the small badge icon to ensure compatibility
       vibrate: [200, 100, 200],
       timestamp: now.getTime() // Add timestamp for native sorting/display if supported
     };
 
     const title = `${timeString}`;
+
+    // Play Shopify-like sound (Cha-ching)
+    const audio = new Audio("https://cdn.pixabay.com/audio/2024/09/13/audio_24e0544f12.mp3"); // Cash register sound
+    audio.play().catch(e => console.log("Audio play failed (user interaction required):", e));
 
     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({
