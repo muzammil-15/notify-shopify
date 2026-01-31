@@ -77,7 +77,7 @@ const App = () => {
     const title = `${timeString}`;
 
     // Play Shopify-like sound (Cha-ching)
-    const audio = new Audio("https://cdn.pixabay.com/audio/2024/09/13/audio_24e0544f12.mp3"); // Cash register sound
+    const audio = new Audio("/notification.mp3"); // Cash register sound
     audio.play().catch(e => console.log("Audio play failed (user interaction required):", e));
 
     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
@@ -110,6 +110,7 @@ const App = () => {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', flexDirection: 'column' }}>
+      <audio src="/notification.mp3" controls></audio>
       <h1>Shopify Alert System</h1>
       <button
         onClick={notifyMe}
